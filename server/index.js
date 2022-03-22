@@ -1,32 +1,23 @@
+require('dotenv').config();
 const express = require('express');
 const app = express();
-const PORT = 3001;
+const cors = require('cors');
 const mongoose = require('mongoose');
-require('dotenv').config();
+const connection = require('./db');
+const PORT = 8080;
+const userRoutes = require('./routes/users')
+const authRoutes = require('./routes/auth')
 
-const UserModel = require('./models/User');
+// database connection
+connection();
 
-const PASSWORD = process.env.DATABASE_PASSWORD;
-const DBNAME = process.env.DATABASE_NAME;
+// middleware
+app.use(express.json());
+app.use(cors());
 
-app.use(express.json())
-
-mongoose.connect(`mongodb+srv://BWSIEVERT:${PASSWORD}@scrimaster.4hpsi.mongodb.net/${DBNAME}?retryWrites=true&w=majority`, {
-    useNewUrlParser: true,
-});
-
-app.get('/', async (req, res) => {
-    const user = new UserModel({
-        userName: 'George',
-        email: 'Georgeman@gmail.com',
-        password: 'Georgye12345'
-    });
-    try {
-        await user.save();
-    } catch (error) {
-        console.log(error)
-    }
-})
+// routes
+app.use('/api/users', userRoutes);
+app.use('/api/auth', authRoutes);
 
 app.listen(PORT, () => {
     console.log(`Server running on port ${PORT}!`)
