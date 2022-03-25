@@ -18,7 +18,7 @@ const userSchema = new mongoose.Schema({
         type: String,
         required: true
     },
-    avatar: {
+    activisionId: {
         type: String,
         required: true,
         default: "https://icon-library.com/icon/user-profile-icon-11.html"
@@ -47,7 +47,7 @@ const validate = (data) => {
         name: joi.string().required().label("Name"),
         email: joi.string().required().email().label("Email"),
         password: passwordComplexity().required().label("Password"),
-        avatar: joi.string().required().label("Avatar")
+        activisionId: joi.string().required().label("ActivisionId")
     });
     return schema.validate(data)
 }
